@@ -1,0 +1,44 @@
+﻿@model IEnumerable<testsubject.Models.Profile>
+@{
+    ViewData["Title"] = "My Bookings";
+    Layout = "_Layout";
+}
+<h2>Profile List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Username</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Postal Code</th>
+            <th>Country</th>
+            <th>Date of Birth</th>
+            <th>Biography</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var profile in Model)
+        {
+            <tr>
+                <td>@profile.Email</td>
+                <td>@profile.FirstName</td>
+                <td>@profile.LastName</td>
+                <td>@profile.Username</td>
+                <td>@profile.PhoneNumber</td>
+                <td>@profile.Address</td>
+                <td>@profile.City</td>
+                <td>@profile.State</td>
+                <td>@profile.PostalCode</td>
+                <td>@profile.Country</td>
+                <td>@profile.DateOfBirth?.ToString("yyyy-MM-dd")</td>
+                <td>@profile.Biography</td>
+            </tr>
+        }
+    </tbody>
+</table>

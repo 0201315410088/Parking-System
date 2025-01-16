@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Upload Car Image";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Car Image</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .upload-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f5f5f5;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+            .upload-container h2 {
+                margin-bottom: 20px;
+            }
+
+        .preview {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+            .preview img {
+                width: 250px;
+                height: 150px;
+                object-fit: cover;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background-color: #e0e0e0;
+            }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .btn-upload {
+            width: 100%;
+        }
+    </style>
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+</head>
+<body>
+    <div class="upload-container">
+        <h2 class="text-center">Upload Car Image</h2>
+        <form asp-controller="CarImage" asp-action="Upload" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Choose a car image</label>
+                <input type="file" name="file" class="form-control" onchange="previewImage(event)" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-upload">Upload</button>
+        </form>
+        <div class="preview">
+            <h3>Image Preview</h3>
+            <img id="imagePreview" src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBA==" alt="Your Car Image" />
+        </div>
+    </div>
+</body>
+</html>

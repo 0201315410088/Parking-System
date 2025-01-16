@@ -1,0 +1,129 @@
+﻿@model testsubject.Models.Profile
+
+@{
+    ViewData["Title"] = "My Bookings";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Profile</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAi9bDBYgjk-GaBc0WKU0MI3dBePGAkpBc&libraries=places"></script>
+    <script>
+        function initAutocomplete() {
+            var input = document.getElementById('autocomplete');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+
+            autocomplete.setFields(['address_component']);
+
+            autocomplete.addListener('place_changed', function () {
+                var place = autocomplete.getPlace();
+                var city = '';
+                var state = '';
+                var postalCode = '';
+                var country = '';
+                var address = '';
+
+                for (var i = 0; i < place.address_components.length; i++) {
+                    var component = place.address_components[i];
+                    var componentType = component.types[0];
+
+                    switch (componentType) {
+                        case 'locality':
+                            city = component.long_name;
+                            break;
+                        case 'administrative_area_level_1':
+                            state = component.short_name;
+                            break;
+                        case 'postal_code':
+                            postalCode = component.long_name;
+                            break;
+                        case 'country':
+                            country = component.long_name;
+                            break;
+                        case 'route':
+                        case 'street_number':
+                            address += component.long_name + ' ';
+                            break;
+                    }
+                }
+
+                document.getElementById('City').value = city;
+                document.getElementById('State').value = state;
+                document.getElementById('PostalCode').value = postalCode;
+                document.getElementById('Country').value = country;
+                document.getElementById('Address').value = address.trim();
+            });
+        }
+    </script>
+</head>
+<body onload="initAutocomplete()">
+    <h2>Create Profile</h2>
+
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label asp-for="FirstName"></label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName"></label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input asp-for="Email" type="hidden" class="form-control" readonly />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+     
+        <div class="form-group">
+            <input asp-for="Username" type="hidden" class="form-control" readonly />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="PhoneNumber"></label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Address"></label>
+            <input asp-for="Address" id="autocomplete" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="City"></label>
+            <input asp-for="City" id="City" class="form-control" />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="State"></label>
+            <input asp-for="State" id="State" class="form-control" />
+            <span asp-validation-for="State" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PostalCode"></label>
+            <input asp-for="PostalCode" id="PostalCode" class="form-control" />
+            <span asp-validation-for="PostalCode" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Country"></label>
+            <input asp-for="Country" id="Country" class="form-control" />
+            <span asp-validation-for="Country" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DateOfBirth"></label>
+            <input asp-for="DateOfBirth" class="form-control" />
+            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Biography"></label>
+            <textarea asp-for="Biography" class="form-control"></textarea>
+            <span asp-validation-for="Biography" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</body>
+</html>

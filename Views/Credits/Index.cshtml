@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Credit>
+
+<h2>Credits</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User Email</th>
+            <th>Available Credit</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var credit in Model)
+            {
+                <tr>
+                    <td>@credit.UserEmail</td>
+                    <td>@credit.AvailableCredit</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@credit.Id">Details</a> |
+                        <a asp-action="Edit" asp-route-id="@credit.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@credit.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">No credits available.</td>
+            </tr>
+        }
+    </tbody>
+</table>

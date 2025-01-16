@@ -1,0 +1,212 @@
+﻿@model IEnumerable<RitsonNewSlot>
+@{
+    ViewData["Title"] = "Available Slots";
+    Layout = "_Layout";
+}
+
+<h1>Available Parking Slots</h1>
+
+<div class="parking-lot">
+    @foreach (var slot in Model)
+    {
+        <div class="parking-slot @(slot.IsTaken ? "taken" : "available")"
+             data-slot-id="@slot.SlotId"
+             onclick="selectSlot(@slot.SlotId)">
+            <span>Slot @slot.SlotId</span>
+        </div>
+    }
+</div>
+
+<h2>Book a Slot</h2>
+<form id="bookingForm" method="post" action="/Ritson/BookSlot" class="booking-form">
+    <input type="hidden" name="slotId" id="slotId" required />
+    <label for="bookingStartTime">Start Time (UTC):</label>
+    <input type="datetime-local" name="bookingStartTime" min="@DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm")" required onchange="validateTimes()" />
+    <label for="bookingEndTime">End Time (UTC):</label>
+    <input type="datetime-local" name="bookingEndTime" min="@DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm")" required onchange="validateTimes()" />
+
+    <label for="carType">Car Type:</label>
+    <select name="carType" id="carType" required>
+        @foreach (var carType in Enum.GetValues(typeof(CarType)))
+        {
+            <option value="@carType">@carType</option>
+        }
+    </select>
+
+    <label for="carPlate">Car Plate:</label>
+    <input type="text" name="carPlate" id="carPlate" maxlength="15" required />
+
+    <button type="submit">Book</button>
+</form>
+
+<h2>Booked Times</h2>
+<div class="booked-times">
+    @foreach (var slot in Model)
+    {
+        <div class="slot-bookings">
+            <h3>Slot @slot.SlotId</h3>
+            @if (slot.Bookings != null && slot.Bookings.Any())
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>From</th>
+                            <th>To</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var booking in slot.Bookings)
+                        {
+                            <tr>
+                                <td>@booking.BookingTime.ToLocalTime().AddHours(-2).ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>@booking.EndTime.ToLocalTime().AddHours(-2).ToString("yyyy-MM-dd HH:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No bookings</p>
+            }
+        </div>
+    }
+</div>
+
+<script>
+    document.getElementById('bookingForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message);
+            window.location.href = '/Ritson/MyBookings';
+        } else {
+            alert(result.message);
+        }
+    });
+
+    function selectSlot(slotId) {
+        document.getElementById('slotId').value = slotId;
+        document.querySelectorAll('.parking-slot').forEach(slot => {
+            slot.classList.remove('selected');
+        });
+        document.querySelector(`[data-slot-id="${slotId}"]`).classList.add('selected');
+    }
+
+    function validateTimes() {
+        const startTime = document.querySelector('input[name="bookingStartTime"]').value;
+        const endTime = document.querySelector('input[name="bookingEndTime"]').value;
+        if (startTime && endTime && new Date(startTime) >= new Date(endTime)) {
+            alert('End time must be after start time.');
+            document.querySelector('input[name="bookingEndTime"]').value = '';
+        }
+    }
+</script>
+
+<style>
+    .parking-lot {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .parking-slot {
+        width: 100px;
+        height: 150px;
+        border: 2px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+
+        .parking-slot.available {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .parking-slot.taken {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            cursor: not-allowed;
+        }
+
+        .parking-slot.available:hover {
+            background-color: #c3e6cb;
+        }
+
+        .parking-slot.selected {
+            background-color: #007bff;
+            border-color: #0056b3;
+            color: white;
+        }
+
+    .booked-times {
+        margin-top: 20px;
+    }
+
+    .slot-bookings {
+        margin-bottom: 20px;
+    }
+
+        .slot-bookings h3 {
+            margin-bottom: 10px;
+        }
+
+        .slot-bookings table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .slot-bookings th, .slot-bookings td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .slot-bookings th {
+            background-color: #f8f9fa;
+        }
+
+        .slot-bookings tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+    .booking-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+
+        .booking-form label {
+            font-weight: bold;
+        }
+
+        .booking-form input, .booking-form select, .booking-form button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .booking-form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+            .booking-form button:hover {
+                background-color: #0056b3;
+            }
+</style>

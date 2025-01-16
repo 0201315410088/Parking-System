@@ -1,0 +1,26 @@
+﻿@model decimal?
+
+@{
+    ViewData["Title"] = "Withdraw Credits";
+    Layout = "_Layout";
+}
+
+<h2>Withdraw Credits</h2>
+
+<form asp-action="Withdraw" method="post">
+    <div class="form-group">
+        <label for="amount">Amount to Withdraw (ZAR):</label>
+        <input type="number" name="amount" class="form-control" min="1" max="@ViewBag.AvailableCredit" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Withdraw</button>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}

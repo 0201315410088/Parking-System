@@ -1,0 +1,36 @@
+﻿@* @model IEnumerable<testsubject.Models.Booking>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+<link href="~/css/stylebase.css" rel="stylesheet" />
+
+
+
+<form method="post" action="/Home/CreateCheckoutSession">
+    <div class="form-group">
+        <label for="bookingId">Select Booking:</label>
+        <select id="bookingId" name="bookingId" class="form-control" required>
+            <option value="">-- Select Booking --</option>
+            @foreach (var booking in Model)
+            {
+<option value="@booking.BookingId">
+    @booking.CarNumberPlate - @booking.ParkingLot - @booking.BookPer - @booking.TotalCost.ToString("C", new System.Globalization.CultureInfo("en-US"))
+</option>
+            }
+        </select>
+        <div class="invalid-feedback">
+            Please select a booking.
+        </div>
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @Html.ValidationSummary(true)
+            </div>
+        }
+
+    </div>
+    <button type="submit" class="btn btn-primary">Checkout</button>
+</form>
+
+ *@

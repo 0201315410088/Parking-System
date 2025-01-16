@@ -1,0 +1,35 @@
+﻿@model List<SteveProfileTransactionViewModel>
+
+@{
+    ViewData["Title"] = "My Transaction History";
+    Layout = "_Layout";
+}
+
+<h2>My Transaction History</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Booking ID</th>
+            <th>User Name</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Cost</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transaction in Model)
+        {
+            <tr>
+                <td>@transaction.SteveTransactionHistory.BookingId</td>
+                <td>@transaction.Profile.FirstName</td> <!-- Access Username through Profile -->
+                <td>@transaction.Profile.LastName</td> <!-- Access Username through Profile -->
+                <td>@transaction.Profile.Username</td> <!-- Access Username through Profile -->
+                <td>@transaction.Profile.UserType</td> <!-- Access Username through Profile -->
+                <td>@transaction.SteveTransactionHistory.StartTime</td>
+                <td>@transaction.SteveTransactionHistory.EndTime</td>
+                <td>@transaction.SteveTransactionHistory.Cost</td>
+            </tr>
+        }
+    </tbody>
+</table>

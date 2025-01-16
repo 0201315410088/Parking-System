@@ -1,0 +1,314 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    Layout = "_Layout";
+
+}
+
+<!-- Navbar -->
+
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <h1>Welcome to the Parking Management System</h1>
+        <p>Your gateway to finding the best parking spots at DUT and beyond.</p>
+        <img src="~/download-removebg-preview.png" alt="Hero Image" />
+    </div>
+</div>
+
+<!-- Introductory Note -->
+<div class="intro-note container">
+    <h2>Why Choose Us?</h2>
+    <p>
+        Our Parking Management System is designed to make your parking experience smooth and hassle-free. Whether you’re a student, faculty member, or visitor, our platform offers real-time information on parking availability, easy pre-booking options, and a secure environment for your vehicle.
+    </p>
+    <p>
+        We understand that parking can be a challenge, especially in busy areas. That’s why we’ve developed a system that not only helps you find parking spots but also ensures that your vehicle is safe and secure. Our customized solutions cater to different needs, providing peace of mind every time you park.
+    </p>
+</div>
+
+<!-- Categories Section -->
+<div class="container">
+    <div class="categories">
+        <h2>Explore Our Services</h2>
+        <div class="row">
+            <div class="col">
+                <a href="#">Real-time Parking Availability</a>
+                <p>Get up-to-the-minute details on parking availability across various locations, ensuring you never waste time searching for a spot.</p>
+            </div>
+            <div class="col">
+                <a href="#">Pre-booking Options</a>
+                <p>Reserve your parking space in advance and enjoy a stress-free experience, knowing that a spot is waiting for you.</p>
+            </div>
+            <div class="col">
+                <a href="#">Security Features</a>
+                <p>Our facilities are equipped with the latest security measures, including surveillance cameras and patrols, to keep your vehicle safe.</p>
+            </div>
+            <div class="col">
+                <a href="#">Customized Solutions</a>
+                <p>We offer tailored parking solutions for businesses, events, and more, designed to meet your specific requirements.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Content Section -->
+    <div class="featured-content">
+        <h2>Top Destinations</h2>
+        <div class="row">
+            <div class="col">
+                <img src="~/2-1-21.jpg" alt="DUT Parking" />
+                <h3>Durban University of Technology</h3>
+                <p>Located at the heart of Durban, DUT offers convenient parking for students, staff, and visitors. Our system ensures you always find a spot.</p>
+            </div>
+            <div class="col">
+                <img src="~/265361165_3106841842935167_3199025970225728948_n.jpg" alt="City Campus Parking" />
+                <h3>City Campus</h3>
+                <p>Whether you're attending classes or visiting the campus, City Campus parking facilities are easy to access and secure.</p>
+            </div>
+            <div class="col">
+                <img src="~/dut-steve-biko-campus-1.jpg" alt="Faculty of Engineering Parking" />
+                <h3>Faculty of Engineering Parking</h3>
+                <p>Specially designed for the Faculty of Engineering, these parking spaces offer proximity to classrooms and laboratories.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="call-to-action container">
+    <h2>Ready to Park with Us?</h2>
+    <p>Sign up today to take advantage of our comprehensive parking solutions. Whether you're a daily commuter or just visiting, we have a spot for you!</p>
+    <a asp-area="Identity" asp-page="/Account/Register" class="cta-button">Get Started</a>
+</div>
+
+
+
+<!-- Enhanced CSS -->
+<style>
+    /* Reset some default styles */
+    body, h1, h2, h3, p, ul, li {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: black;
+        background-color: white;
+        line-height: 1.6;
+    }
+
+    /* Navbar */
+    .navbar {
+        background-color: #3b5d50;
+        padding: 10px 20px;
+    }
+
+        .navbar .navbar-brand {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar .nav {
+            list-style-type: none;
+            display: flex;
+            gap: 20px;
+        }
+
+            .navbar .nav li a {
+                color: #ffffff;
+                text-decoration: none;
+                padding: 10px;
+                transition: color 0.3s ease;
+            }
+
+                .navbar .nav li a:hover {
+                    color: #adb5bd;
+                }
+
+    /* Hero Section */
+    .hero-section {
+        background-color: white;
+        padding: 50px 0;
+        text-align: center;
+    }
+
+        .hero-section h1 {
+            font-size: 36px;
+            color: ##eff2f1;
+        }
+
+        .hero-section p {
+            font-size: 18px;
+            color: #w;
+            margin-top: 10px;
+        }
+
+        .hero-section img {
+            max-width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+    /* Introductory Note */
+    .intro-note {
+        padding: 30px 0;
+        text-align: center;
+        background-color: #ffffff;
+        margin-top: 20px;
+    }
+
+        .intro-note h2 {
+            font-size: 28px;
+            color: #343a40;
+            margin-bottom: 15px;
+        }
+
+        .intro-note p {
+            font-size: 16px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+    /* Categories */
+    .categories {
+        padding: 40px 0;
+    }
+
+        .categories h2 {
+            font-size: 28px;
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .categories .row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .categories .col {
+            text-align: center;
+            max-width: 25%;
+        }
+
+            .categories .col a {
+                display: block;
+                font-size: 20px;
+                color: #007bff;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+            .categories .col p {
+                font-size: 14px;
+                color: #6c757d;
+                margin-top: 10px;
+            }
+
+            .categories .col a:hover {
+                color: #0056b3;
+            }
+
+    /* Featured Content */
+    .featured-content {
+        padding: 40px 0;
+    }
+
+        .featured-content h2 {
+            font-size: 28px;
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .featured-content .row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .featured-content .col {
+            text-align: center;
+            max-width: 30%;
+        }
+
+            .featured-content .col img {
+                max-width: 100%;
+                border-radius: 10px;
+                margin-bottom: 15px;
+            }
+
+            .featured-content .col h3 {
+                font-size: 20px;
+                color: #343a40;
+                margin-bottom: 10px;
+            }
+
+            .featured-content .col p {
+                font-size: 14px;
+                color: #6c757d;
+            }
+
+    /* Call to Action */
+    .call-to-action {
+        padding: 30px 0;
+        text-align: center;
+        background-color: #f8f9fa;
+        margin-top: 20px;
+    }
+
+        .call-to-action h2 {
+            font-size: 28px;
+            color: #343a40;
+            margin-bottom: 15px;
+        }
+
+        .call-to-action p {
+            font-size: 16px;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        .call-to-action .cta-button {
+            background-color: #3b5d50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+            .call-to-action .cta-button:hover {
+                background-color:black;
+            }
+
+    /* Footer */
+    .footer {
+        background-color: #343a40;
+        color: #ffffff;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+        .footer .footer-links {
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+            .footer .footer-links li a {
+                color: #ffffff;
+                text-decoration: underline;
+                transition: color 0.3s ease;
+            }
+
+                .footer .footer-links li a:hover {
+                    color: #adb5bd;
+                }
+</style>

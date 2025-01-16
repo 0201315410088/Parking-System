@@ -1,0 +1,284 @@
+﻿@model Profile
+
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>User Profile</title>
+    <style>
+        body {
+            background-color: #e9ecef;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .profile-container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .profile-container:hover {
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-header {
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-header img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-header h2 {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .profile-header h5 {
+            color: #6c757d;
+            font-size: 18px;
+        }
+
+        .edit-profile-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px 10px;
+            background: #007bff;
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .edit-profile-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .profile-info {
+            margin-top: 30px;
+        }
+
+        .profile-info h4 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+
+        .profile-info p {
+            font-size: 16px;
+            color: #495057;
+            margin: 10px 0;
+        }
+
+        .profile-info .info-label {
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .profile-info .info-value {
+            color: #6c757d;
+            font-size: 15px;
+        }
+
+        .profile-info .contact-info {
+            margin-bottom: 30px;
+        }
+
+        .credit-info {
+            position: absolute;
+            top: -30px;
+            left: -30px;
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .credit-info p {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Responsive Styling */
+ (max-width: 768px) {
+            .profile-container {
+                padding: 20px;
+            }
+
+            .profile-header img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .profile-header h2 {
+                font-size: 24px;
+            }
+
+            .profile-header h5 {
+                font-size: 16px;
+            }
+
+            .profile-info h4 {
+                font-size: 20px;
+            }
+
+            .profile-info p {
+                font-size: 14px;
+            }
+
+            .credit-info {
+                top: -20px;
+                left: -20px;
+                padding: 15px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="profile-container">
+        <!-- Display the available credit at the top left -->
+        <div class="credit-info small-card p-3">
+            @if (ViewBag.HasCreditAccount)
+            {
+                <h5 class="text-success">Credit Balance</h5>
+                <p><strong>Credits:</strong> ZAR @ViewBag.AvailableCredit</p>
+
+                <div class="btn-group mb-2">
+                    <a asp-action="Pay" asp-controller="Credits" class="btn btn-danger btn-sm">Withdraw</a>
+                    <a asp-action="Transfer" asp-controller="Credits" class="btn btn-danger btn-sm">Transfer</a>
+                </div>
+
+                <div class="account-info">
+                    <p class="mb-0">
+                        <strong>Account Number:</strong>
+                        <span id="account-number" class="copyable-account" onclick="copyToClipboard('@ViewBag.AccountNumber')">
+                            @ViewBag.AccountNumber
+                        </span>
+                    </p>
+                    <small class="text-muted">Click to copy.</small>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <p class="text-warning mb-1">No credit account.</p>
+                    <p>Create a Credit Account:</p>
+                    <a asp-action="Create" asp-controller="Credits" class="btn btn-danger btn-sm">Yes</a>
+                </div>
+            }
+        </div>
+
+        <style>
+            .credit-info {
+                background-color: #f8f9fa; /* Light background */
+                border-radius: 15px; /* Slightly rounded corners */
+                box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
+                margin: 10px; /* Space around the card */
+                max-width: 300px; /* Set a max width */
+            }
+
+            .small-card {
+                font-size: 0.9rem; /* Smaller font size */
+            }
+
+            p {
+                color: black; /* Global paragraph color */
+            }
+            .account-info {
+                margin-top: 10px; /* Space above the account info */
+            }
+
+            .copyable-account {
+                cursor: pointer; /* Pointer on hover */
+                color: #007bff; /* Bootstrap primary color */
+                font-weight: bold; /* Bold text */
+                border-bottom: 1px dotted #007bff; /* Dotted underline for visual indication */
+                transition: color 0.3s ease; /* Smooth color transition */
+            }
+
+                .copyable-account:hover {
+                    color: #0056b3; /* Darker blue on hover */
+                }
+        </style>
+
+        <script>
+            function copyToClipboard(accountNumber) {
+                const textarea = document.createElement('textarea');
+                textarea.value = accountNumber;
+                document.body.appendChild(textarea);
+
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+
+                alert('Account number copied to clipboard: ' + accountNumber);
+            }
+        </script>
+
+
+
+<br />
+        <br />
+
+
+        <br />
+<br />
+<br />
+
+
+        <div class="profile-header">
+            <a asp-controller="ProfileCreate" asp-action="Edit" asp-route-id="@Model.Email" class="edit-profile-btn">Edit Profile</a>
+            <img src="data:image;base64,@Convert.ToBase64String(Model.ProfilePicture)" alt="Profile Picture" />
+            <h2>@Model.FirstName @Model.LastName</h2>
+            <h5>@Model.Username</h5>
+        </div>
+
+        <div class="profile-info">
+            <div class="contact-info">
+                <h4>Contact Information</h4>
+                <p><span class="info-label">Email:</span> <span class="info-value">@Model.Email</span></p>
+                <p><span class="info-label">Phone:</span> <span class="info-value">@Model.PhoneNumber</span></p>
+                <p><span class="info-label">Address:</span> <span class="info-value">@Model.Address, @Model.City, @Model.State, @Model.PostalCode, @Model.Country</span></p>
+            </div>
+            <p><span class="info-label">User Type:</span> <span class="info-value">@Model.UserType</span></p>
+            <div class="dob-info">
+                <h4>Date of Birth</h4>
+                <p class="info-value">@Model.DateOfBirth?.ToString("d")</p>
+            </div>
+            <div class="bio-info">
+                <h4>Biography</h4>
+                <p class="info-value">@Model.Biography</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

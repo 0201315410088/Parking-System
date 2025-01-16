@@ -1,0 +1,92 @@
+﻿@model IEnumerable<CityNewSlot>
+
+@{
+    ViewData["Title"] = "Parking Slots";
+    Layout = "_Layout";
+}
+
+<style>
+    .badge-mustard {
+        background-color: #FFD54F; /* Mustard color */
+        color: #000; /* Black text for contrast */
+    }
+</style>
+
+<h1>Parking Slots</h1>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Create New Slot</a>
+</p>
+
+<table class="table table-bordered table-hover">
+    <thead class="thead-light">
+        <tr>
+            <th>Slot Number</th>
+            <th>Status</th>
+            <th>Color</th>
+            <th>Bookings</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var slot in Model)
+        {
+            <tr>
+                <td>@slot.SlotId</td>
+                <td>
+                    @if (slot.IsTaken)
+                    {
+                        <span class="badge badge-danger badge-mustard">Taken</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-success badge-mustard">Available</span>
+                    }
+                </td>
+                <td style="background-color:@slot.Color;">@slot.Color</td>
+                <td>
+                    @if (slot.Bookings != null && slot.Bookings.Any())
+                    {
+                        <ul>
+                            @foreach (var booking in slot.Bookings)
+                            {
+                                <li>From @booking.BookingTime.ToString("yyyy-MM-dd HH:mm") to @booking.EndTime.ToString("yyyy-MM-dd HH:mm")</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>No bookings</p>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@slot.SlotId" class="btn btn-primary btn-sm">Edit</a>
+                    <a asp-action="Details" asp-route-id="@slot.SlotId" class="btn btn-info btn-sm">Details</a>
+
+                    @if (slot.IsDeletable)
+                    {
+                        <a asp-action="Delete" asp-route-id="@slot.SlotId" class="btn btn-danger btn-sm">Delete</a>
+                    }
+                    else
+                    {
+                        <button class="btn btn-danger btn-sm" disabled>Cannot Delete (Booked)</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

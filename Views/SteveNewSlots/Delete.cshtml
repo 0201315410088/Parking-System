@@ -1,0 +1,64 @@
+﻿@model SteveNewSlot
+
+@{
+    ViewData["Title"] = "Remove Slot";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="mb-4 text-danger">@ViewData["Title"]</h1>
+            <hr />
+
+            <h3 class="mb-4">Are you sure you want to remove this slot?</h3>
+
+            <!-- Display Slot Details in a Clean Layout -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">Slot Details</h4>
+                    <dl class="row">
+                        <dt class="col-sm-4 font-weight-bold">
+                            @Html.DisplayNameFor(model => model.IsTaken)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.IsTaken)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Form for Deleting the Slot -->
+            <form asp-action="Delete" class="mb-3">
+                <input type="hidden" asp-for="SlotId" />
+                <div class="form-group">
+                    <input type="submit" value="Delete" class="btn btn-danger px-4" />
+                    <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Optional custom styles to enhance the visual appeal -->
+<style>
+    .card {
+        border-radius: 0.5rem;
+        border: none;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+</style>

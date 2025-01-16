@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="favicon.png">
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+
+    <!-- Bootstrap CSS -->
+    <link href="~/css/bootstrap.mini.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="~/css/stylesheet.css" rel="stylesheet" />
+    <link href="~/css/tiny-slide.css" rel="stylesheet" />
+</head>
+
+
+
+<body>
+    <!-- Start Header/Navigation -->
+    <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+        <div class="container">
+
+            <a class="navbar-brand" href="#" style="font-size:40px">DUT<span>.</span></a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsFurni" style="font-size:20px">
+                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+                    @if (!(User.Identity.IsAuthenticated) && !((User.IsInRole("Admin") || User.IsInRole("Guard"))))
+                    {
+                        <div class="navbar">
+                            <div class="container">
+                                <ul class="nav">
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="@Url.Action("Home", "Home")">Home</a>
+                                    </li>
+                                    <li><a class="nav-link" href="@Url.Action("Services", "Home")">Services</a></li>
+                                    <li><a class="nav-link" href="@Url.Action("About", "Home")">About Us</a></li>
+                                    <li><a class="nav-link" href="@Url.Action("Contact", "Home")">Contact</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Toggle Button -->
+                    <button id="navToggle" class="btn btn-primary" style="color:white;font-size:20px">
+                        Menu
+                    </button>
+
+                    <!-- Navigation Menu -->
+                    <div id="navMenu" class="nav-menu">
+                        <ul class="nav flex-column">
+                            @if (User.Identity.IsAuthenticated && !(User.IsInRole("Admin")) && !(User.IsInRole("Guard")))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="@Url.Action("ViewProfile", "Profile")">Profile</a>
+                                </li>
+                              
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="availableSlotsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Available Slots
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="availableSlotsDropdown">
+                                        <li><a class="dropdown-item" href="@Url.Action("AvailableSlots", "NewParking")">ML Sulton Slots</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("AvailableSlots", "Steve")">Steve Slots</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("AvailableSlots", "City")">City Slots</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("AvailableSlots", "Ritson")">Ritson Slots</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="myBookingsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        My Bookings
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="myBookingsDropdown">
+                                        <li><a class="dropdown-item" href="@Url.Action("MyBookings", "NewParking")">ML MyBookings</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("MyBookings", "Steve")">Steve MyBookings</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("MyBookings", "City")">City MyBookings</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("MyBookings", "Ritson")">Ritson MyBookings</a></li>
+                                    </ul>
+                                </li>
+
+                              
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="addSlotsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Registrations
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="addSlotsDropdown">
+                                        <li><a class="dropdown-item" href="@Url.Action("Create", "CarWashServices")">Register Carwash Service</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("Index", "CarWashServices")">Registion Form</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="@Url.Action("Create", "CarWashBookings")">Book Car Wash</a>
+                                </li>
+                              
+                                <!-- Links visible when the user is logged in -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="@Url.Action("Upload", "CarImage")">Edit Car Image</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="@Url.Action("Transactions", "Credits")">Withrawal Transactions</a>
+                                </li>
+                            
+                            }
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="addSlotsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Due Bookings
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="addSlotsDropdown">
+                                        <li><a class="dropdown-item" href="@Url.Action("CampusRecords", "Steve")">Steve_Biko CampusBookings</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("CampusRecords", "NewParking")">ML_Sultan Campus Bookings</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("CampusRecords", "Ritson")">Ritson Campus Bookings</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("CampusRecords", "City")">City Campus Bookings</a></li>
+                                    </ul>
+                                </li>
+                             
+                          @*       <li class="nav-item">
+                                    <a class="nav-link" href="@Url.Action("Create", "NewSlots")">Add Parking Slot</a>
+                                </li> *@
+       
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="addSlotsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Add Parking Slot
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="addSlotsDropdown">
+                                        <li><a class="dropdown-item" href="@Url.Action("Index", "SteveNewSlots")">Steve_Biko Campus</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("Index", "NewSlots")">ML_Sultan Campus</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("Index", "RitsonNewSlots")">Ritson Campus</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("Index", "CityNewSlots")">City Campus</a></li>
+                                    </ul>
+                                </li>
+@*                                 <li class="nav-item">
+                                    <a class="nav-link" href="@Url.Action("PaymentHistory", "NewParking")">Transaction History</a>
+                                </li> *@
+                                  <li class="nav-item">
+                                    <a class="nav-link" href="@Url.Action("AdminIndex", "CarWashServices")">CarWash Registrations</a>
+                                </li>
+                                   <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="addSlotsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                      Transaction History
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="addSlotsDropdown">
+                                        <li><a class="dropdown-item" href="@Url.Action("PaymentHistory", "Steve")">Steve_Biko Transaction History</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("PaymentHistory", "NewParking")">ML_Sultan Transaction History</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("PaymentHistory", "Ritson")">Ritson Transaction History</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("PaymentHistory", "City")">City Transaction History</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="@Url.Action("AdminTransactions", "Credits")">Withrawal Transactions</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Guard"))
+                            {
+                               <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="addSlotsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Due Bookings
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="addSlotsDropdown">
+                                        <li><a class="dropdown-item" href="@Url.Action("CampusRecords", "Steve")">Steve_Biko CampusBookings</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("CampusRecords", "NewParking")">ML_Sultan Campus Bookings</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("CampusRecords", "Ritson")">Ritson Campus Bookings</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("CampusRecords", "City")">City Campus Bookings</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                    <!-- CSS for Swipe Navigation -->
+                    <style>
+                        .nav-menu {
+                            display: none; /* Hidden by default */
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 250px;
+                            height: 100%;
+                            background-color: #3b5d4f; /* Adjust background color */
+                            color: white; /* Text color */
+                            overflow-y: auto;
+                            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+                            transition: transform 0.3s ease;
+                            z-index: 1000; /* Ensure it overlays correctly */
+                        }
+
+                            .nav-menu.active {
+                                display: block; /* Show menu */
+                                transform: translateX(0); /* Slide in effect */
+                            }
+
+                        .nav-link {
+                            color: white; /* Link text color */
+                            padding: 10px 15px; /* Padding for links */
+                            border-radius: 5px; /* Rounded corners */
+                            text-decoration: none; /* Remove underline */
+                            transition: background-color 0.3s; /* Smooth background color transition */
+                        }
+
+                            .nav-link:hover {
+                                background-color: #2e4b3f; /* Darker shade on hover */
+                                text-decoration: none; /* Ensure no underline on hover */
+                            }
+
+                        .dropdown-menu {
+                            background-color: #3b5d4f; /* Match dropdown with nav menu */
+                            border: none; /* Remove default border */
+                        }
+
+                        .dropdown-item {
+                            color: white; /* Dropdown item text color */
+                            padding: 10px 15px; /* Padding for dropdown items */
+                        }
+
+                            .dropdown-item:hover {
+                                background-color: #2e4b3f; /* Darker shade on hover */
+                            }
+                    </style>
+
+                    <!-- JavaScript for Toggle Action -->
+                    <script>
+                        document.getElementById('navToggle').addEventListener('click', function () {
+                            const navMenu = document.getElementById('navMenu');
+                            navMenu.classList.toggle('active'); // Toggle the active class to show/hide the menu
+                        });
+                    </script>
+
+                    <li>
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                            <partial name="_LoginPartial" />
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+    <!-- End Header/Navigation -->
+
+
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

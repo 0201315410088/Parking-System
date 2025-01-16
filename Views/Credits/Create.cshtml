@@ -1,0 +1,47 @@
+﻿@model testsubject.Credit
+
+@{
+    ViewData["Title"] = "AdminTransactions";
+    Layout = "_Layout";
+}
+
+<h1>Create Credit Account</h1>
+
+<h4 class="text-muted">Enter Credit Details</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <form asp-action="Create" class="bg-light p-4 rounded shadow-sm">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="form-group">
+                <label asp-for="UserEmail" class="control-label">
+                    <i class="bi bi-envelope-fill"></i> Email
+                </label>
+                <input asp-for="UserEmail" class="form-control" placeholder="Enter your email" />
+                <span asp-validation-for="UserEmail" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AvailableCredit" class="control-label">
+                    <i class="bi bi-wallet-fill"></i> Available Credit (ZAR)
+                </label>
+                <input asp-for="AvailableCredit" class="form-control" placeholder="Enter available credit" readonly hidden />
+                <span asp-validation-for="AvailableCredit" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="mt-4 text-center">
+    <a asp-controller="Profile" asp-action="ViewProfile" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Profile
+    </a>
+</div>
+
+<!-- Ensure Bootstrap Icons CSS is referenced -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" />

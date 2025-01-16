@@ -1,0 +1,79 @@
+﻿<style>
+    .slot-info {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .booking-list ul {
+        padding-left: 0;
+        list-style-type: none;
+    }
+
+    .booking-list li {
+        background-color: #e9ecef;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 6px;
+    }
+
+        .booking-list li strong {
+            color: #495057;
+        }
+
+    .btn-custom {
+        background-color: #007bff;
+        color: white;
+        margin-top: 10px;
+    }
+</style>
+@model CityNewSlot
+
+@{
+    ViewData["Title"] = "Slot Details";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <h1 class="text-primary mb-4">Slot Details - @Model.SlotId</h1>
+
+    <div class="slot-info">
+        <h4 class="text-info">Slot Information</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.IsTaken)</dt>
+            <dd class="col-sm-9">
+                <span style="color:@Model.Color">@Html.DisplayFor(model => model.IsTaken)</span>
+            </dd>
+        </dl>
+    </div>
+
+    <div class="mt-4 booking-list">
+        <h4 class="text-info">Bookings</h4>
+        <hr />
+        @if (Model.Bookings.Any())
+        {
+            <ul class="list-group">
+                @foreach (var booking in Model.Bookings)
+                {
+                    <li class="list-group-item">
+                        <strong>Car Plate:</strong> @booking.CarPlate <br />
+                        <strong>Car Type:</strong> @booking.CityCarType <br />
+                        <strong>Booking Time:</strong> @booking.BookingTime.ToString("g") <br />
+                        <strong>End Time:</strong> @booking.EndTime.ToString("g") <br />
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">No bookings found for this slot.</p>
+        }
+    </div>
+
+    <div class="mt-4">
+        <a class="btn btn-custom" asp-action="Edit" asp-route-id="@Model.SlotId">Edit</a>
+        <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+    </div>
+</div>

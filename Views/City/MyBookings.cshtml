@@ -1,0 +1,264 @@
+﻿@model IEnumerable<CityCarImageBookingViewModel>
+
+@{
+    ViewData["Title"] = "My Bookings";
+    Layout = "_Layout";
+}
+
+<h1 class="text-center my-4 text-uppercase font-weight-bold" style="font-size: 2.5rem;">My Bookings</h1>
+
+<div class="container">
+    <div class="row justify-content-center">
+        @foreach (var booking in Model)
+        {
+            <div class="col-md-10 mb-5">
+                <div class="card shadow-lg border-0 rounded-lg overflow-hidden">
+                    <div class="card-header bg-dark text-white text-center">
+                        <h4 class="card-title mb-0 text-uppercase" style="letter-spacing: 1px;">Slot ID: @booking.CityBookingViewModel.SlotId</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <p><strong>Booking Start:</strong> <span style="color: #007bff;">@booking.CityBookingViewModel.BookingTime.AddHours(-2).ToString("yyyy-MM-ddTHH:mm") UTC</span></p>
+                                <p><strong>Duration:</strong> <span style="color: #28a745;">@($"{booking.CityBookingViewModel.BookingDuration.Days}d {booking.CityBookingViewModel.BookingDuration.Hours}h {booking.CityBookingViewModel.BookingDuration.Minutes}m")</span></p>
+                                <p>
+                                    <strong>Status:</strong>
+                                    <span class="badge @(booking.CityBookingViewModel.Status == "Active" ? "badge-success" : "badge-danger")">
+                                        @booking.CityBookingViewModel.Status
+                                    </span>
+                                </p>
+                                <p>
+                                    <strong>Remaining Time:</strong>
+                                    @if (booking.CityBookingViewModel.Status == "Active")
+                                    {
+                                        <span id="countdown-@booking.CityBookingViewModel.BookingId"
+                                              data-starttime="@booking.CityBookingViewModel.BookingTime.AddHours(-2).ToString("o")"
+                                              data-endtime="@booking.CityBookingViewModel.EndTime.AddHours(-2).ToString("o")"></span>
+                                    }
+                                    else
+                                    {
+                                        <span>Expired</span>
+                                    }
+                                </p>
+                            </div>
+                            <div class="col-lg-6 text-center">
+                                <strong>Car Image:</strong>
+                                @if (booking.CarImageModel != null)
+                                {
+                                    <img src="data:image;base64,@Convert.ToBase64String(booking.CarImageModel.ImageData)" alt="Car Image" class="img-fluid img-thumbnail shadow-sm" style="max-width: 200px; height: auto; border-radius: 15px;" />
+                                }
+                                else
+                                {
+                                    <p class="text-muted">No image available</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light text-dark text-center">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Car Type:</strong> @booking.CityBookingViewModel.CityCarType</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Plate No:</strong> @booking.CityBookingViewModel.CarPlate</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-danger btn-lg btn-block mt-3" style="font-size: 1.2rem;" onclick="bookingManager.signOutFromParking('@booking.CityBookingViewModel.BookingId')">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out and Pay
+                        </button>
+                     
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+<script>
+    // Countdown timer logic here (if needed)
+</script>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+        class BookingManager {
+            constructor() {
+                this.hasLowTimeWarningShown = false;
+                document.addEventListener('DOMContentLoaded', this.initializeCountdown.bind(this));
+            }
+
+            initializeCountdown() {
+                setInterval(this.updateCountdown.bind(this), 1000);
+            }
+
+            updateCountdown() {
+                document.querySelectorAll('[id^="countdown-"]').forEach((element) => {
+                    const startTime = new Date(element.getAttribute('data-starttime'));
+                    const endTime = new Date(element.getAttribute('data-endtime'));
+                    const now = new Date();
+
+                    const timeRemaining = endTime - now;
+
+                    if (now < startTime) {
+                        this.handleNotStarted(startTime, now, element);
+                    } else if (timeRemaining > 0) {
+                        this.handleActiveBooking(timeRemaining, element);
+                    } else {
+                        this.handleExpired(element);
+                    }
+                });
+            }
+
+            handleNotStarted(startTime, now, element) {
+                element.innerHTML = this.formatTime(startTime - now) + " until start";
+            }
+
+            handleActiveBooking(timeRemaining, element) {
+                element.innerHTML = this.formatTime(timeRemaining);
+            }
+
+            handleExpired(element) {
+                element.innerHTML = "Expired";
+            }
+
+            formatTime(ms) {
+                const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((ms / (1000 * 60)) % 60);
+                const seconds = Math.floor((ms / 1000) % 60);
+                return `${hours}h ${minutes}m ${seconds}s`;
+            }
+
+        signOutFromParking(bookingId) {
+            fetch(`/City/SignOutFromParking?bookingId=${bookingId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isNotStarted) {
+                        Swal.fire({
+                            title: "Booking Not Started",
+                            text: "Your booking has not started yet. Do you want to cancel it?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Cancel Booking",
+                            cancelButtonText: "Close"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                this.cancelBooking(bookingId);
+                            }
+                        });
+                    } else if (data.isOvertime) {
+                        // Format the overtime cost to 2 decimal places
+                        const formattedOvertimeCost = (data.overtimeCost).toFixed(2);
+
+                        Swal.fire({
+                            title: "Overtime Alert",
+                            html: `You are in overtime! <span style="color: red;">Additional cost: ${formattedOvertimeCost} ZAR</span>. Do you want to proceed with the payment?`,
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Proceed to Payment",
+                            cancelButtonText: "Cancel"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = data.paymentUrl;
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Booking Status",
+                            html: `Your booking is due. Signing out or canceling is permitted before and after the duration.`,
+                            icon: "info",  // Changed icon to 'info'
+                            // showCancelButton: true,
+                            // cancelButtonText: "Close"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Perform any necessary actions here
+                                console.log('User confirmed the action');
+                            }
+                        });
+
+                    }
+                })
+                .catch(error => {
+                    console.error('Error signing out from parking:', error);
+                });
+        }
+        cancelBooking(bookingId) {
+    fetch(`/City/CancelBooking?bookingId=${bookingId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                title: "Booking Canceled",
+                text: "Your booking has been successfully canceled.",
+                icon: "success"
+            }).then(() => {
+                // Optionally, reload the page or update the UI
+                window.location.reload();
+            });
+        } else {
+            Swal.fire({
+                title: "Error",
+                text: data.message,
+                icon: "error"
+            });
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            title: "Error",
+            text: "There was an error canceling your booking. Please try again later.",
+            icon: "error"
+        });
+        console.error('Error canceling booking:', error);
+    });
+}
+
+        }
+
+    // Instantiate BookingManager
+    const bookingManager = new BookingManager();
+</script>
+
+
+<style>
+    .card {
+        border-radius: 10px;
+    }
+
+    .card-header {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .badge-success {
+        background-color: #28a745;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 300;
+    }
+</style>

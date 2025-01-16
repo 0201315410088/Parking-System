@@ -1,0 +1,176 @@
+﻿@model IEnumerable<testsubject.CarWashService>
+
+@{
+    ViewData["Title"] = "Car Wash Services Index";
+    Layout = "_Layout";
+}
+
+<style>
+    .registration-form {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .service-card {
+        border: 2px solid #007bff; /* Outline color */
+        border-radius: 10px; /* Rounded corners */
+        padding: 20px; /* Padding inside the card */
+        margin-bottom: 20px; /* Space between cards */
+        background-color: #ffffff; /* Background for each card */
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    }
+
+    .section-title {
+        margin-top: 20px;
+        color: #007bff; /* Section title color */
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333; /* Label color */
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #007bff; /* Input border color */
+        border-radius: 5px; /* Rounded corners */
+    }
+
+        .form-control[readonly] {
+            background-color: #e9ecef; /* Light grey background for read-only fields */
+        }
+
+    .btn {
+        margin: 5px;
+    }
+
+    .btn-success {
+        background-color: #28a745; /* Green for Accept */
+        border-color: #28a745; /* Green border */
+    }
+
+    .btn-danger {
+        background-color: #dc3545; /* Red for Reject */
+        border-color: #dc3545; /* Red border */
+    }
+
+    .btn:hover {
+        opacity: 0.9; /* Slightly fade buttons on hover */
+    }
+
+    .btn-primary {
+        background-color: #007bff; /* Primary button color */
+        border-color: #007bff; /* Primary button border */
+    }
+
+    .btn-secondary {
+        background-color: #6c757d; /* Secondary button color */
+        border-color: #6c757d; /* Secondary button border */
+    }
+
+        .btn-primary:hover,
+        .btn-secondary:hover {
+            opacity: 0.9; /* Slightly fade buttons on hover */
+        }
+</style>
+
+<div class="registration-form">
+    <h1>Car Wash Service Registrations Awaiting Approval</h1>
+
+    @foreach (var service in Model)
+    {
+        <div class="service-card">
+            <div class="form-group">
+                <h3 class="section-title">Service Details</h3>
+                <label>First Name:</label>
+                <input type="text" class="form-control" value="@service.FirstName" readonly />
+
+                <label>Last Name:</label>
+                <input type="text" class="form-control" value="@service.LastName" readonly />
+
+                <label>Username:</label>
+                <input type="text" class="form-control" value="@service.Username" readonly />
+
+                <label>Service Name:</label>
+                <input type="text" class="form-control" value="@service.ServiceName" readonly />
+
+                <label>Description:</label>
+                <textarea class="form-control" readonly>@service.Description</textarea>
+            </div>
+
+            <div class="form-group">
+                <h3 class="section-title">Personal Information</h3>
+                <label>Email:</label>
+                <input type="email" class="form-control" value="@service.StudentEmail" readonly />
+
+                <label>Phone Number:</label>
+                <input type="text" class="form-control" value="@service.PhoneNumber" readonly />
+
+                <label>Address:</label>
+                <input type="text" class="form-control" value="@service.Address" readonly />
+
+                <label>City:</label>
+                <input type="text" class="form-control" value="@service.City" readonly />
+
+                <label>State:</label>
+                <input type="text" class="form-control" value="@service.State" readonly />
+
+                <label>Postal Code:</label>
+                <input type="text" class="form-control" value="@service.PostalCode" readonly />
+
+                <label>Country:</label>
+                <input type="text" class="form-control" value="@service.Country" readonly />
+
+                <div>
+                    <br />
+                    <label>Date of Birth:</label>
+                    @Html.DisplayFor(model => service.DateOfBirth)
+                </div>
+                <br />
+            </div>
+
+            <div class="form-group">
+                <h3 class="section-title">Submission Details</h3>
+                <br />
+                <div>
+                    <label>Submission Date:</label>
+                    @Html.DisplayFor(model => service.SubmissionDate)
+                </div>
+                <br />
+                <label>Status:</label>
+                <input type="text" class="form-control" value="@service.Status" readonly />
+            </div>
+
+            <div class="form-group">
+                <form asp-action="Accept" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@service.Id" />
+                    <button type="submit" class="btn btn-success">Accept</button>
+                </form>
+                <form asp-action="Reject" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@service.Id" />
+                    <button type="submit" class="btn btn-danger">Reject</button>
+                </form>
+            </div>
+        </div> <!-- End of service card -->
+
+        <hr />
+    }
+
+    <div class="form-group">
+        <a asp-action="Create" class="btn btn-primary">Register New Service</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
