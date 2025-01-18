@@ -13,9 +13,9 @@ namespace testsubject.Models
         {
             var smtpServer = "smtp.gmail.com";
             var smtpPort = 587; // Port for TLS encryption
-            var smtpUsername = "groupfezitest@gmail.com";
-            var smtpPassword = "lnkdwwlbdtlldzsx";
-            var fromEmail = "groupfezitest@gmail.com";
+            var smtpUsername = "";
+            var smtpPassword = "";
+            var fromEmail = "";
 
             using (var client = new SmtpClient(smtpServer, smtpPort))
             {
